@@ -215,5 +215,83 @@ namespace DbHelpers
         { }
 
         #endregion
+
+        #region ExecuteNonQuery
+
+        public int ExecuteNonQuery(DbCommand command, DbConnection connection)
+        {
+            OnExecuteCommand(command);
+
+            command.Connection = connection;
+
+            return command.ExecuteNonQuery();
+        }
+
+        public int ExecuteNonQuery(DbCommand command, DbTransaction transaction)
+        {
+            OnExecuteCommand(command);
+
+            command.Connection = transaction.Connection;
+            command.Transaction = transaction;
+
+            return command.ExecuteNonQuery();
+        }
+
+        public int ExecuteNonQuery(DbCommand command)
+        {
+            int affectedRows;
+
+            using (DbConnection connection = CreateConnection())
+            {
+                connection.Open();
+
+                affectedRows = ExecuteNonQuery(command, connection);
+
+                connection.Close();
+            }
+
+            return affectedRows;
+        }
+
+        #endregion
+
+        #region ExecuteNonQueryAsync
+
+        public Task<int> ExecuteNonQueryAsync(DbCommand command, DbConnection connection)
+        {
+            OnExecuteCommand(command);
+
+            command.Connection = connection;
+
+            return command.ExecuteNonQueryAsync();
+        }
+
+        public Task<int> ExecuteNonQueryAsync(DbCommand command, DbTransaction transaction)
+        {
+            OnExecuteCommand(command);
+
+            command.Connection = transaction.Connection;
+            command.Transaction = transaction;
+
+            return command.ExecuteNonQueryAsync();
+        }
+
+        public async Task<int> ExecuteNonQueryAsync(DbCommand command)
+        {
+            int affectedRows;
+
+            using (DbConnection connection = CreateConnection())
+            {
+                await connection.OpenAsync();
+
+                affectedRows = await ExecuteNonQueryAsync(command, connection);
+
+                connection.Close();
+            }
+
+            return affectedRows;
+        }
+
+        #endregion
     }
 }
