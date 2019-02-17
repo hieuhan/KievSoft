@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataReaderConverter.cs" />
+    <Compile Include="DataReaderExtensions.cs" />
     <Compile Include="DbConvert.cs" />
     <Compile Include="RawValue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
